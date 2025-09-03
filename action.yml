@@ -1,0 +1,42 @@
+name: "Compute GHCR revision tag"
+description: "Computes next rN for a GHCR container image given version and Debian codename."
+author: "Alessandro Chitolina"
+branding:
+    icon: "package"
+    color: "blue"
+
+inputs:
+    version:
+        description: "App version (e.g. 1.2 or 1.2.3)"
+        required: true
+    debian_codename:
+        description: "Debian codename (e.g. bookworm)"
+        required: true
+    image_name:
+        description: "Container image (package) name in GHCR, defaults to the repository name. Supports subpaths like 'tools/myapp'."
+        required: false
+        default: ""
+    major_only_tag:
+        description: "If 'true', also output the plain major tag (e.g. '1')."
+        required: false
+        default: "false"
+
+outputs:
+    tag:
+        description: "Full tag with revision (e.g. 1.2.3-bookworm-r7)"
+    base:
+        description: "Base string used for revision (e.g. 1.2.3-bookworm)"
+    revision:
+        description: "Next revision number (e.g. 7)"
+    tags:
+        description: "All suggested tags (newline-separated)"
+    tags_json:
+        description: "All suggested tags as JSON array"
+
+runs:
+    using: "node20"
+    main: "dist/index.js"
+
+permissions:
+    contents: read
+    packages: read
