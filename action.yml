@@ -20,6 +20,10 @@ inputs:
         description: "If 'true', also output the plain major tag (e.g. '1')."
         required: false
         default: "false"
+    github_token:
+        description: "GitHub token (pass secrets.GITHUB_TOKEN)"
+        required: false
+        default: ${{ github.token }}
 
 outputs:
     tag:

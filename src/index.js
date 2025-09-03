@@ -90,8 +90,8 @@ function computeTags({ major, minor, patch, patchPresent, codename, allTags }) {
 
 async function run() {
     try {
-        const token = process.env.GITHUB_TOKEN || core.getInput('github_token', { required: false });
-        const octokit = github.getOctokit(token || process.env.GITHUB_TOKEN || '');
+        const token = core.getInput('github_token', { required: true });
+        const octokit = github.getOctokit(token);
 
         const { owner, repo } = github.context.repo;
 
