@@ -31767,10 +31767,18 @@ async function fetchAllTags(octokit, owner, packageName) {
         }
     }
 
-    // 2) fallback user
-    const route = `/users/${owner}/packages/container/${encodeURIComponent(packageName)}/versions`;
-    const versions = await listAllVersions(octokit, route);
-    return versions.flatMap(v => (v?.metadata?.container?.tags) || []);
+    try {
+        // 2) fallback user
+        const route = `/users/${owner}/packages/container/${encodeURIComponent(packageName)}/versions`;
+        const versions = await listAllVersions(octokit, route);
+        return versions.flatMap(v => (v?.metadata?.container?.tags) || []);
+    } catch (e) {
+        if (!e || (e.status !== 404 && e.status !== 403)) {
+            throw e;
+        }
+    }
+
+    return [];
 }
 
 function computeTags({ major, minor, patch, patchPresent, codename, allTags }) {
