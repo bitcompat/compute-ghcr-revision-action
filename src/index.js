@@ -127,4 +127,15 @@ async function run() {
     }
 }
 
-run();
+if (process.env.NODE_ENV !== 'test') {
+    run();
+}
+
+export {
+    escRegex,
+    parseVersion,
+    listAllVersions,
+    fetchAllTags,
+    computeTags,
+    run,
+};

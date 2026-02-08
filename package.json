@@ -6,7 +6,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "ncc build src/index.js -o dist"
+    "build": "ncc build src/index.js -o dist",
+    "test": "NODE_ENV=test node --test"
   },
   "dependencies": {
     "@actions/core": "^1.11.1",

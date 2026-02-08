@@ -31683,12 +31683,37 @@ module.exports = parseParams
 /******/ }
 /******/ 
 /************************************************************************/
+/******/ /* webpack/runtime/define property getters */
+/******/ (() => {
+/******/ 	// define getter functions for harmony exports
+/******/ 	__nccwpck_require__.d = (exports, definition) => {
+/******/ 		for(var key in definition) {
+/******/ 			if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
+/******/ 				Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 			}
+/******/ 		}
+/******/ 	};
+/******/ })();
+/******/ 
+/******/ /* webpack/runtime/hasOwnProperty shorthand */
+/******/ (() => {
+/******/ 	__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ })();
+/******/ 
 /******/ /* webpack/runtime/compat */
 /******/ 
 /******/ if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = new URL('.', import.meta.url).pathname.slice(import.meta.url.match(/^file:\/\/\/\w:/) ? 1 : 0, -1) + "/";
 /******/ 
 /************************************************************************/
 var __webpack_exports__ = {};
+/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
+/* harmony export */   $o: () => (/* binding */ computeTags),
+/* harmony export */   Bi: () => (/* binding */ escRegex),
+/* harmony export */   FW: () => (/* binding */ listAllVersions),
+/* harmony export */   J$: () => (/* binding */ fetchAllTags),
+/* harmony export */   eF: () => (/* binding */ run),
+/* harmony export */   ot: () => (/* binding */ parseVersion)
+/* harmony export */ });
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(7484);
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(3228);
 
@@ -31783,8 +31808,8 @@ function computeTags({ major, minor, patch, patchPresent, codename, allTags }) {
 
 async function run() {
     try {
-        const token = process.env.GITHUB_TOKEN || _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('github_token', { required: false });
-        const octokit = _actions_github__WEBPACK_IMPORTED_MODULE_1__.getOctokit(token || process.env.GITHUB_TOKEN || '');
+        const token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('github_token', { required: true });
+        const octokit = _actions_github__WEBPACK_IMPORTED_MODULE_1__.getOctokit(token);
 
         const { owner, repo } = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo;
 
@@ -31820,5 +31845,16 @@ async function run() {
     }
 }
 
-run();
+if (process.env.NODE_ENV !== 'test') {
+    run();
+}
 
+
+
+var __webpack_exports__computeTags = __webpack_exports__.$o;
+var __webpack_exports__escRegex = __webpack_exports__.Bi;
+var __webpack_exports__fetchAllTags = __webpack_exports__.J$;
+var __webpack_exports__listAllVersions = __webpack_exports__.FW;
+var __webpack_exports__parseVersion = __webpack_exports__.ot;
+var __webpack_exports__run = __webpack_exports__.eF;
+export { __webpack_exports__computeTags as computeTags, __webpack_exports__escRegex as escRegex, __webpack_exports__fetchAllTags as fetchAllTags, __webpack_exports__listAllVersions as listAllVersions, __webpack_exports__parseVersion as parseVersion, __webpack_exports__run as run };
