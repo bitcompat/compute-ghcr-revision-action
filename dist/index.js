@@ -31762,7 +31762,7 @@ async function fetchAllTags(octokit, owner, packageName) {
         const versions = await listAllVersions(octokit, route);
         return versions.flatMap(v => (v?.metadata?.container?.tags) || []);
     } catch (e) {
-        if (!e || (e.status !== 404 && e.status !== 403)) {
+        if (!e || e.status !== 404) {
             throw e;
         }
     }
@@ -31773,7 +31773,7 @@ async function fetchAllTags(octokit, owner, packageName) {
         const versions = await listAllVersions(octokit, route);
         return versions.flatMap(v => (v?.metadata?.container?.tags) || []);
     } catch (e) {
-        if (!e || (e.status !== 404 && e.status !== 403)) {
+        if (!e || e.status !== 404) {
             throw e;
         }
     }

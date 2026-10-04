@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { parseVersion, computeTags } from '../src/index.js';
+import { parseVersion, computeTags, fetchAllTags } from '../src/index.js';
 
 test('parseVersion handles major only', () => {
     const v = parseVersion('1');
@@ -73,4 +73,44 @@ test('computeTags without patch uses major.minor base', () => {
     assert.equal(set.has('2.5-trixie-r11'), true);
     assert.equal(set.has('2.5-trixie'), true);
     assert.equal(set.has('2.5'), true);
+});
+
+test('GHCR only treats 404 as absence and propagates authorization failures', async () => {
+    const cases = [
+        { statuses: [200], tags: ['1.2.3-trixie-r4'] },
+        { statuses: [404, 200], tags: ['1.2.3-trixie-r4'] },
+        { statuses: [404, 404], tags: [] },
+        { statuses: [403], failure: 403 },
+        { statuses: [404, 403], failure: 403 },
+        { statuses: [401], failure: 401 },
+        { statuses: [500], failure: 500 },
+    ];
+    for (const { statuses, tags, failure } of cases) {
+        const routes = [];
+        const octokit = { request: async route => {
+            const status = statuses[routes.length];
+            routes.push(route);
+            assert.ok(status, 'unexpected fallback request');
+            if (status !== 200) throw Object.assign(new Error('GHCR request failed'), { status });
+            return { data: [{ metadata: { container: { tags } } }] };
+        } };
+        const request = fetchAllTags(octokit, 'bitcompat', 'tools/myapp');
+        if (failure) await assert.rejects(request, { status: failure });
+        else assert.deepEqual(await request, tags);
+        assert.equal(routes.length, statuses.length);
+        assert.equal(routes[0], '/orgs/bitcompat/packages/container/tools%2Fmyapp/versions');
+        if (routes.length === 2) assert.match(routes[1], /^\/users\/bitcompat\//);
+    }
+});
+
+test('GHCR authorization failure during pagination never resets the revision', async () => {
+    let calls = 0;
+    const octokit = { request: async (route, { page }) => {
+        calls++;
+        assert.match(route, /^\/orgs\//);
+        if (page === 2) throw Object.assign(new Error('Forbidden'), { status: 403 });
+        return { data: Array(100).fill({ metadata: { container: { tags: ['1.2.3-trixie-r9'] } } }) };
+    } };
+    await assert.rejects(fetchAllTags(octokit, 'bitcompat', 'myapp'), { status: 403 });
+    assert.equal(calls, 2);
 });
