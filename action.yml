@@ -10,7 +10,7 @@ inputs:
         description: "App version (e.g. 1.2 or 1.2.3)"
         required: true
     debian_codename:
-        description: "Debian codename (e.g. bookworm)"
+        description: "Debian codename (e.g. trixie)"
         required: true
     image_name:
         description: "Container image (package) name in GHCR, defaults to the repository name. Supports subpaths like 'tools/myapp'."
@@ -27,9 +27,9 @@ inputs:
 
 outputs:
     tag:
-        description: "Full tag with revision (e.g. 1.2.3-bookworm-r7)"
+        description: "Full tag with revision (e.g. 1.2.3-trixie-r7)"
     base:
-        description: "Base string used for revision (e.g. 1.2.3-bookworm)"
+        description: "Base string used for revision (e.g. 1.2.3-trixie)"
     revision:
         description: "Next revision number (e.g. 7)"
     tags:

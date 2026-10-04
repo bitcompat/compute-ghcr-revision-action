@@ -4,14 +4,14 @@ GitHub Action to compute the next `-rN` tag for a GHCR container image, based on
 
 **Inputs**
 - `version` (required): App version like `1.2` or `1.2.3`.
-- `debian_codename` (required): Debian codename like `bookworm`.
+- `debian_codename` (required): Debian codename like `trixie`.
 - `image_name` (optional): GHCR package name, defaults to repository name. Supports subpaths like `tools/myapp`.
 - `major_only_tag` (optional): If `true`, include the plain major tag (e.g. `1`). Default `false`.
 - `github_token` (optional): GitHub token, defaults to `github.token`.
 
 **Outputs**
-- `tag`: Full tag with revision (e.g. `1.2.3-bookworm-r7`).
-- `base`: Base string used for revision (e.g. `1.2.3-bookworm`).
+- `tag`: Full tag with revision (e.g. `1.2.3-trixie-r7`).
+- `base`: Base string used for revision (e.g. `1.2.3-trixie`).
 - `revision`: Next revision number (e.g. `7`).
 - `tags`: All suggested tags (newline-separated).
 - `tags_json`: All suggested tags as JSON array.
@@ -36,7 +36,7 @@ jobs:
         uses: bitcompat/compute-ghcr-revision-action@v1
         with:
           version: 1.2.3
-          debian_codename: bookworm
+          debian_codename: trixie
           image_name: tools/myapp
           major_only_tag: true
       - run: echo "Tags: ${{ steps.tag.outputs.tags }}"
